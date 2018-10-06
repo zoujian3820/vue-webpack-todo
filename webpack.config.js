@@ -22,6 +22,10 @@ const config = {
                 use: ['style-loader', 'css-loader']
             },
             {
+                test: /\.jsx$/,
+                loader: 'babel-loader'
+            },
+            {
                 test: /\.(gif|jpg|jpeg|png|svg)$/,
                 use: [
                     {
@@ -35,7 +39,17 @@ const config = {
             },
             {
                 test: /.styl$/,
-                use: ['style-loader', 'css-loader', 'stylus-loader']
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            sourceMap: true,
+                        }
+                    },
+                    'stylus-loader'
+                ]
             }
         ]
     },
