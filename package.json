@@ -1,0 +1,40 @@
+{
+  "name": "vue-webpack-todo",
+  "version": "1.0.0",
+  "description": "用Vue+webpack手动搭的一个测试demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zoujian3820/vue-webpack-todo.git"
+  },
+  "author": "mrzou",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zoujian3820/vue-webpack-todo/issues"
+  },
+  "homepage": "https://github.com/zoujian3820/vue-webpack-todo#readme",
+  "dependencies": {
+    "vue": "^2.5.17"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "css-loader": "^1.0.0",
+    "file-loader": "^2.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "minimatch": "^3.0.4",
+    "style-loader": "^0.23.0",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "url-loader": "^1.1.1",
+    "vue-loader": "^15.4.2",
+    "vue-template-compiler": "^2.5.17",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.9"
+  }
+}
