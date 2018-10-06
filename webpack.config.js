@@ -55,11 +55,11 @@ if (isDev) {
     config.devtool = '#cheap-module-eval-source-map'
     config.devServer = {
         port: 8009,
-        host: '0.0.0.0',
+        host: '0.0.0.0', //此种设置，可以支持 localhost / 127.0.0.1 / 局域网id访问(ipconfig)
         overlay: {
-            errors: true,
+            errors: true
         },
-        open: true,
+        open: true, //会在运行npm run dev时自动打开浏览器
         // historyFallback: {},
 
         // hot：防止在单页应用开发时，修改了某个组件的代码，导致整个页面都发生渲染，
