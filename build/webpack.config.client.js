@@ -14,6 +14,7 @@ const isDev = process.env.NODE_ENV === 'development';
 
 const defaultPlugins = [
     new VueLoaderPlugin(),
+
     /*
      * htmlWebpackPlugin
      * 为html文件中引入的外部资源如script、link动态添加每次compile后的hash，防止引用缓存的外部文件
@@ -50,7 +51,7 @@ if (isDev) {
     * 利用webpack-merge合并webpack配置，且不会改动webpack.config.base.js文件的配置
     * 不用手动一个个去push进去，会直接把当前添加的配置，直接合到base里面去，并重新返回一个新的配置
     * */
-    config = merge(baseConfig,{
+    config = merge(baseConfig, {
         //devtool用于开发时，调试代码的工具，在页面中debug;时可以看到项目写的代码，而不是编译后的代码
         devtool: '#cheap-module-eval-source-map',
         module: {
@@ -60,6 +61,13 @@ if (isDev) {
                     use: [
                         'vue-style-loader',
                         'css-loader',
+                        // {
+                        //     loader: 'css-loader',
+                        //     options: {
+                        //         module: true,
+                        //         localIdentName: isDev ? '[path]-[name]-[hash:base64:5]' : '[hash:base64:5]'
+                        //     }
+                        // },
                         {
                             loader: 'postcss-loader',
                             options: {
@@ -78,7 +86,7 @@ if (isDev) {
         ])
     });
 } else {
-    config = merge(baseConfig,{
+    config = merge(baseConfig, {
         entry: {
             app: path.join(__dirname, '../client/index.js')
 
@@ -98,6 +106,12 @@ if (isDev) {
                         fallback: 'vue-style-loader',
                         use: [
                             'css-loader',
+                            // {
+                            //     loader: 'css-loader',
+                            //     options: {
+                            //         importLoaders: 1
+                            //     }
+                            // },
                             {
                                 loader: 'postcss-loader',
                                 options: {

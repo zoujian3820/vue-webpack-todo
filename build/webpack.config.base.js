@@ -25,7 +25,7 @@ const config = {
             },
             // {
             //     test: /\.css$/,
-            //     use: ['vue-style-loader', 'css-loader']
+            //     use: ["style-loader", "css-loader", "postcss-loader"]
             // },
             {
                 test: /\.jsx$/,
