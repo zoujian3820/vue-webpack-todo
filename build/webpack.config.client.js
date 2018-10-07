@@ -20,7 +20,7 @@ const defaultPlugins = [
      * 可以生成创建html入口文件，比如单页面可以生成一个html文件入口，配置N个html-webpack-plugin可以生成N个页面入口
      * */
     new htmlWebpackPlugin({
-        template: path.join(__dirname, '../src/index.html')
+        template: path.join(__dirname, '../client/index.html')
     }),
     new webpack.DefinePlugin({
         'process.env': {
@@ -80,7 +80,7 @@ if (isDev) {
 } else {
     config = merge(baseConfig,{
         entry: {
-            app: path.join(__dirname, '../src/index.js')
+            app: path.join(__dirname, '../client/index.js')
 
             // vendor: ['vue','vue-router']
             // vendor实现类库文件单独打包，如vue 、vue-router等库会单独打包成单个文件 （要配合new webpack.optimize.CommonsChunkPlugin插件使用）

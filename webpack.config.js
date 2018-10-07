@@ -9,7 +9,7 @@ const isDev = process.env.NODE_ENV === 'development';
 const config = {
     mode: process.env.NODE_ENV || 'production',
     target: "web",
-    entry: path.join(__dirname, 'src/index.js'),
+    entry: path.join(__dirname, 'client/index.js'),
     output: {
         filename: 'bundle.[hash:8].js',
         path: path.join(__dirname, 'dist')
@@ -50,7 +50,7 @@ const config = {
         * 可以生成创建html入口文件，比如单页面可以生成一个html文件入口，配置N个html-webpack-plugin可以生成N个页面入口
         * */
         new htmlWebpackPlugin({
-            template: './src/index.html'
+            template: './client/index.html'
         }),
         new webpack.DefinePlugin({
             'process.env': {
