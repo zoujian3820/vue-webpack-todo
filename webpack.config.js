@@ -44,7 +44,14 @@ const config = {
     },
     plugins: [
         new VueLoaderPlugin(),
-        new htmlWebpackPlugin({template: './src/index.html'}),
+        /*
+        * htmlWebpackPlugin
+        * 为html文件中引入的外部资源如script、link动态添加每次compile后的hash，防止引用缓存的外部文件
+        * 可以生成创建html入口文件，比如单页面可以生成一个html文件入口，配置N个html-webpack-plugin可以生成N个页面入口
+        * */
+        new htmlWebpackPlugin({
+            template: './src/index.html'
+        }),
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: isDev ? '"development"' : '"production"'
@@ -68,7 +75,7 @@ if (isDev) {
             'stylus-loader'
         ]
     });
-    //用于开发时，调试代码的工具，在页面中debug;时可以看到项目写的代码，而不是编译后的代码
+    //devtool用于开发时，调试代码的工具，在页面中debug;时可以看到项目写的代码，而不是编译后的代码
     config.devtool = '#cheap-module-eval-source-map';
     config.devServer = {
         port: 8009,
@@ -87,12 +94,20 @@ if (isDev) {
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin()
     )
-}else{
-    config.output.filename = '[name].[chunkhash:8].js'
+} else {
+    config.entry = {
+        app: path.join(__dirname, 'src/index.js')
+
+    // vendor: ['vue','vue-router']
+    // vendor实现类库文件单独打包，如vue 、vue-router等库会单独打包成单个文件 （要配合new webpack.optimize.CommonsChunkPlugin插件使用）
+    // 由于webpack4.0 废弃了webpack.optimize.CommonsChunkPlugin，用optimization.splitChunks.chunks替代，
+    // all表示所有从node_modules中引入的库，都会打包成单个文件
+    };
+    config.output.filename = '[name].[chunkhash:8].js';
     config.module.rules.push(
         {
             test: /\.styl(us)?$/,
-            use: ExtractPlugin.extract({
+            use: ExtractPlugin.extract({ //ExtractPlugin（extract-text-webpack-plugin）插件实现css文件单独打包成单个文件
                 fallback: 'vue-style-loader',
                 use: [
                     'css-loader',
@@ -107,8 +122,24 @@ if (isDev) {
             })
         },
     );
+    config.optimization = {
+        splitChunks: {
+            chunks: 'all'
+        },
+        runtimeChunk: true //实现webapck相关配置代码单独打包，用于此类文件可以让浏览器缓存
+    };
     config.plugins.push(
-        new ExtractPlugin('styles.[chunkhash:8].css')
+        new ExtractPlugin('styles.[chunkhash:8].css')//,实现css文件单独打包成单个文件
+
+        // 实现js类库文件单独打包, webpack4.0已经废弃，请用optimization.splitChunks
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     name: 'vendor'
+        // }),
+
+        //实现webapck相关配置代码单独打包、放在vendor后面，webapck4.0已经废弃，请用optimization.runtimeChunk替代
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     name: 'runtime'
+        // })
     )
 }
 
