@@ -20,3 +20,15 @@
     >     npm install --save-dev babel-plugin-transform-vue-jsx
 * 扩展webpack.config.base.js的配置需要下载 webpack-merge 插件   
     >     npm install --saev-dev webpack-merge
+* 打包时删除旧的包文件夹dist，可用rimraf 插件
+    >     npm install --save-dev rimraf
+    
+    ######     在 package.json > scripts字段中添加如下命令：
+    >     "scripts": {
+    >       "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.config.client.js",
+    >       "build": "npm run clear && npm run build:client",
+    >       "build2": "npm run clear && cross-env NODE_ENV=production webpack --config build/webpack.config.client.js",
+    >       "clear": "rimraf dist"
+    >     }
+    
+    >     然后运行 npm run build 即先运行 npm run clear，再运行 npm run build:client
