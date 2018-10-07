@@ -2,13 +2,16 @@ const path = require('path');
 const {VueLoaderPlugin} = require('vue-loader');
 const htmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+const ExtractPlugin = require('extract-text-webpack-plugin');
+
 const isDev = process.env.NODE_ENV === 'development';
 
 const config = {
+    mode: process.env.NODE_ENV || 'production',
     target: "web",
     entry: path.join(__dirname, 'src/index.js'),
     output: {
-        filename: 'bundle.js',
+        filename: 'bundle.[hash:8].js',
         path: path.join(__dirname, 'dist')
     },
     module: {
@@ -17,10 +20,10 @@ const config = {
                 test: /\.vue$/,
                 loader: 'vue-loader'
             },
-            {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader']
-            },
+            // {
+            //     test: /\.css$/,
+            //     use: ['vue-style-loader', 'css-loader']
+            // },
             {
                 test: /\.jsx$/,
                 loader: 'babel-loader'
@@ -36,26 +39,12 @@ const config = {
                         }
                     }
                 ]
-            },
-            {
-                test: /.styl$/,
-                use: [
-                    'style-loader',
-                    'css-loader',
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            sourceMap: true,
-                        }
-                    },
-                    'stylus-loader'
-                ]
             }
         ]
     },
     plugins: [
         new VueLoaderPlugin(),
-        new htmlWebpackPlugin(),
+        new htmlWebpackPlugin({template: './src/index.html'}),
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: isDev ? '"development"' : '"production"'
@@ -65,8 +54,22 @@ const config = {
 }
 
 if (isDev) {
+    config.module.rules.push({
+        test: /\.styl(us)?$/,
+        use: [
+            'vue-style-loader',
+            'css-loader',
+            {
+                loader: 'postcss-loader',
+                options: {
+                    sourceMap: true,
+                }
+            },
+            'stylus-loader'
+        ]
+    });
     //用于开发时，调试代码的工具，在页面中debug;时可以看到项目写的代码，而不是编译后的代码
-    config.devtool = '#cheap-module-eval-source-map'
+    config.devtool = '#cheap-module-eval-source-map';
     config.devServer = {
         port: 8009,
         host: '0.0.0.0', //此种设置，可以支持 localhost / 127.0.0.1 / 局域网id访问(ipconfig)
@@ -84,6 +87,29 @@ if (isDev) {
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin()
     )
+}else{
+    config.output.filename = '[name].[chunkhash:8].js'
+    config.module.rules.push(
+        {
+            test: /\.styl(us)?$/,
+            use: ExtractPlugin.extract({
+                fallback: 'vue-style-loader',
+                use: [
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            sourceMap: true,
+                        }
+                    },
+                    'stylus-loader'
+                ]
+            })
+        },
+    );
+    config.plugins.push(
+        new ExtractPlugin('styles.[chunkhash:8].css')
+    )
 }
 
-module.exports = config
+module.exports = config;
