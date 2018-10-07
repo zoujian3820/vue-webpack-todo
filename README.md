@@ -18,3 +18,5 @@
     >     npm install --save-dev babel-plugin-syntax-jsx
     
     >     npm install --save-dev babel-plugin-transform-vue-jsx
+* 扩展webpack.config.base.js的配置需要下载 webpack-merge 插件   
+    >     npm install --saev-dev webpack-merge
